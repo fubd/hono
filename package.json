@@ -1,0 +1,30 @@
+{
+  "scripts": {
+    "dev:hono": "tsx watch src/index.ts",
+    "dev:client": "rspack build --watch",
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:hono\"",
+    "build": "rspack build && tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.2",
+    "hono": "^4.7.10",
+    "kysely": "^0.28.2",
+    "mysql2": "^3.14.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@rspack/cli": "^0.4.3",
+    "@rspack/core": "^0.4.3",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "concurrently": "^8.2.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  },
+  "volta": {
+    "node": "22.14.0"
+  },
+  "type": "module"
+}
