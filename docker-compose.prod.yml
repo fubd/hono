@@ -1,0 +1,9 @@
+services:
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_PORT: ${NODE_PORT}   # 从 .env 自动提取传入 Dockerfile
+    image: registry.cn-hangzhou.aliyuncs.com/fubd_own/hono-app:1.0
+    command: ["npm", "start"]

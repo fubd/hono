@@ -3,16 +3,19 @@
     "dev:hono": "tsx watch src/index.ts",
     "dev:client": "rspack build --watch",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:hono\"",
-    "build": "rspack build && tsc",
+    "build": "rspack build && tsc && cp -r src/sql dist/sql",
     "start": "node dist/index.js"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.2",
+    "dotenv": "^17.2.0",
     "hono": "^4.7.10",
+    "ioredis": "^5.6.1",
     "kysely": "^0.28.2",
     "mysql2": "^3.14.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tinypool": "^1.1.1"
   },
   "devDependencies": {
     "@rspack/cli": "^0.4.3",

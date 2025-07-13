@@ -13,12 +13,12 @@ export default defineConfig({
   output: {
     filename: 'client.js',
     path: path.resolve(__dirname, 'static'),
-    publicPath: '/',
+    publicPath: '/static',
   },
   builtins: {
     html: [
       {
-        template: './public/index.html',
+        template: './index.html',
         filename: 'index.html',
         inject: 'body'
       }

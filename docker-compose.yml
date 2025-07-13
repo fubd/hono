@@ -1,0 +1,67 @@
+services:
+  node:
+    image: node:22-alpine
+    container_name: hono-app
+    working_dir: ${WORKING_DIR_CONTAINER}
+    expose:
+      - "${NODE_PORT_CONTAINER}"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_PORT_CONTAINER=${DB_PORT_CONTAINER}
+      - DB_NAME=${DB_NAME}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT_CONTAINER=${REDIS_PORT_CONTAINER}
+    depends_on:
+      - mysql
+      - redis
+    command: sh -c "npm install --include=dev && npm run dev"
+    volumes:
+      - ${WORKING_DIR_HOST}:${WORKING_DIR_CONTAINER}
+    ports:
+      - "${NODE_PORT_HOST}:${NODE_PORT_CONTAINER}"
+
+  mysql:
+    image: mysql:8.0
+    container_name: hono-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    volumes:
+      - mysql-data:${DB_DATA_CONTAINER}
+      - ./mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql:ro
+    expose:
+      - "${DB_PORT_CONTAINER}"
+    ports:
+      - "${DB_PORT_HOST}:${DB_PORT_CONTAINER}"
+
+  redis:
+    image: redis:7
+    container_name: hono-redis
+    volumes:
+      - redis-data:${REDIS_DATA_CONTAINER}
+    expose:
+      - "${REDIS_PORT_CONTAINER}"
+    ports:
+      - "${REDIS_PORT_HOST}:${REDIS_PORT_CONTAINER}"
+
+  nginx:
+    image: nginx:alpine
+    container_name: hono-nginx
+    depends_on:
+      - node
+    volumes:
+      - ${STATIC_DIR_HOST}:${STATIC_DIR_CONTAINER}:ro
+      - ${NGINX_CONF_HOST}:${NGINX_CONF_CONTAINER}:ro
+    ports:
+      - "${NGINX_PORT_HOST}:${NGINX_PORT_CONTAINER}"
+
+volumes:
+  mysql-data:
+  redis-data:
