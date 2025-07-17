@@ -124,7 +124,7 @@ function App() {
         </ul> 
       </div>
       <dialog id="myDialog" ref={dialogRef}>
-        <h3>编辑用户</h3>
+        <h3>edit user</h3>
         {current && (
           <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
             <div>

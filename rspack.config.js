@@ -1,6 +1,7 @@
 import { defineConfig } from '@rspack/cli'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { rspack } from '@rspack/core';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -11,18 +12,10 @@ export default defineConfig({
   },
   devtool: false,
   output: {
-    filename: 'client.js',
+    filename: '[contenthash].bundle.js',
     path: path.resolve(__dirname, 'static'),
     publicPath: '/static',
-  },
-  builtins: {
-    html: [
-      {
-        template: './index.html',
-        filename: 'index.html',
-        inject: 'body'
-      }
-    ],
+    clean: true,
   },
   module: {
     rules: [
@@ -60,5 +53,20 @@ export default defineConfig({
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx']
-  }
+  },
+  plugins: [new rspack.HtmlRspackPlugin({
+    templateContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>rspack</title>
+        </head>
+        <body>
+          <div id="root"></div>
+        </body>
+      </body>
+      </html>
+    `,
+  })],
 })

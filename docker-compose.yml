@@ -1,3 +1,4 @@
+
 services:
   node:
     image: node:22-alpine
@@ -57,7 +58,7 @@ services:
     depends_on:
       - node
     volumes:
-      - ${STATIC_DIR_HOST}:${STATIC_DIR_CONTAINER}:ro
+      - ${WORKING_DIR_HOST}:${WORKING_DIR_CONTAINER}:ro
       - ${NGINX_CONF_HOST}:${NGINX_CONF_CONTAINER}:ro
     ports:
       - "${NGINX_PORT_HOST}:${NGINX_PORT_CONTAINER}"
