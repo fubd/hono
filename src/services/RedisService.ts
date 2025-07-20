@@ -11,7 +11,7 @@ export interface IRedisService {
 
 
 @injectable()
-export class RedisService implements IRedisService {
+export class RedisService {
   private redis: Redis;
 
   constructor() {

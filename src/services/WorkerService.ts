@@ -7,7 +7,7 @@ export interface IWorkerService {
 }
 
 @injectable()
-export class WorkerService implements IWorkerService {
+export class WorkerService {
   private pool: Tinypool;
 
   constructor() {

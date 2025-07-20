@@ -126,6 +126,34 @@ function App() {
     };
   }, []);
 
+  const [file, setFile] = useState(null);
+  const [uploadRestul, setUploadResult] = useState<{filename: string} | null>(null);
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+    const handleUpload = async () => {
+    if (!file) {
+      alert('请选择文件');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      setUploadResult(data);
+    } catch (err) {
+      alert('上传失败');
+    }
+  };
+
   return (
     <div>
       <div style={{display: 'flex', gap: '10px'}}>
@@ -145,6 +173,16 @@ function App() {
         </ul>
       </div>
       <hr />
+          <div>
+      <h2>文件上传</h2>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={handleUpload}>上传</button>
+      {uploadRestul && <pre>{JSON.stringify(uploadRestul, null, 2)}</pre>}
+      {
+        uploadRestul?.filename && <img src={"https://m1.fubodong.com/uploads/" + uploadRestul?.filename} />
+      }
+    </div>
+    <hr/>
       <button onClick={getAll}>get All User</button>
       <div>
         <ul style={{listStyle: 'none', margin: 0, padding: 8, display: 'flex', flexDirection: 'column', gap: '10px', borderRadius: 4, border: '1px solid #ccc', width:  600}}>

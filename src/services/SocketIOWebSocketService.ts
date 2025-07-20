@@ -10,7 +10,7 @@ export interface ISocketIOWebSocketService {
 }
 
 @injectable()
-export class SocketIOWebSocketService implements ISocketIOWebSocketService {
+export class SocketIOWebSocketService {
   private io: Server
   private sockets = new Map<string, Socket>()
 

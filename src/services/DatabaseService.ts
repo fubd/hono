@@ -14,7 +14,7 @@ export interface IDatabaseService {
 }
 
 @injectable()
-export class DatabaseService implements IDatabaseService {
+export class DatabaseService {
   private db: Kysely<Database>;
   private pool: Pool;
 

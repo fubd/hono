@@ -19,6 +19,7 @@ import { type IWorkerService, WorkerService } from './services/WorkerService.js'
 import { TYPES } from './types/inversify-types.js'
 import { UserController, UserService, type IUserService } from './user/index.js'
 import { SocketIOWebSocketService, type ISocketIOWebSocketService } from './services/SocketIOWebSocketService.js'
+import { FileUploadService, type IFileUploadService } from './services/FileUploadService.js'
 
 // 加载 .env 文件
 dotenv.config()
@@ -32,6 +33,7 @@ container.bind<IDatabaseService>(TYPES.DatabaseService).to(DatabaseService).inSi
 container.bind<IRedisService>(TYPES.RedisService).to(RedisService).inSingletonScope();
 container.bind<IWorkerService>(TYPES.WorkerService).to(WorkerService).inSingletonScope();
 container.bind<ISocketIOWebSocketService>(TYPES.SocketIOWebSocketService).to(SocketIOWebSocketService).inSingletonScope();
+container.bind<IFileUploadService>(TYPES.FileUploadService).to(FileUploadService).inSingletonScope();
 
 container.bind<IUserService>(TYPES.UserService).to(UserService).inSingletonScope();
 container.bind<UserController>(TYPES.UserController).to(UserController).inSingletonScope();
@@ -42,8 +44,13 @@ await databaseService.initDatabase();
 const socketService = container.get<ISocketIOWebSocketService>(
   TYPES.SocketIOWebSocketService
 )
-const userController = container.get<UserController>(TYPES.UserController);
 
+const fileUploadService = container.get<FileUploadService>(TYPES.FileUploadService);
+app.post('/api/upload', async (c) => {
+  return await fileUploadService.handleUpload(c);
+});
+
+const userController = container.get<UserController>(TYPES.UserController);
 app.get('/api/user/list', (c) => userController.getUsers(c));
 app.get('/api/user', (c) => userController.getUser(c));
 app.post('/api/user/add', (c) => userController.createUser(c));
