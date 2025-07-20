@@ -1,9 +1,11 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
+import { io, Socket } from 'socket.io-client';
 
 const container = document.getElementById('root')
 
 const root = ReactDOM.createRoot(container as HTMLElement)
+let socket: Socket;
 
 function App() {
   const [list, setList] = React.useState<{name: string;id: string;password: string;}[]>([])
@@ -11,7 +13,7 @@ function App() {
   const [current, setCurrent] = React.useState<{name: string;id: string;password: string;} | null>(null)
 
   function getAll() {
-    fetch('https://m1.fubodong.com/api/user').then((res) => res.json()).then((data) => {
+    fetch('https://m1.fubodong.com/api/user/list').then((res) => res.json()).then((data) => {
       setList(data.data)
     }).catch((err) => {
       console.error('Error fetching user:', err)
@@ -94,6 +96,36 @@ function App() {
       });
   }
 
+  const [connected, setConnected] = useState(false);
+  const [messages, setMessages] = useState<string[]>([]);
+
+   useEffect(() => {
+    // 初始化 socket
+    socket = io('https://m1.fubodong.com');
+
+    socket.on('connect', () => {
+      console.log('连接成功:', socket.id);
+      setConnected(true);
+
+      socket.emit('message', '你好，服务器');
+      socket.emit('chat', '来自客户端的 chat 消息');
+    });
+
+    socket.on('testEvent', (data: any) => {
+      console.log('收到 testEvent:', data);
+      setMessages((prev) => [...prev, `reply: ${data.message}`]);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('已断开连接');
+      setConnected(false);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     <div>
       <div style={{display: 'flex', gap: '10px'}}>
@@ -102,6 +134,15 @@ function App() {
         <label htmlFor="password">password</label>
         <input id='password' />
         <button onClick={onAdd}>add User</button>
+      </div>
+      <hr />
+      <div>
+        <h4>消息记录:</h4>
+        <ul>
+          {messages.map((msg, index) => (
+            <li key={index}>{msg}</li>
+          ))}
+        </ul>
       </div>
       <hr />
       <button onClick={getAll}>get All User</button>
