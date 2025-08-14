@@ -7,6 +7,9 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default defineConfig({
+  experiments: {
+    css: true,
+  },
   entry: {
     client: './client/main.tsx'
   },
@@ -18,6 +21,11 @@ export default defineConfig({
     clean: true,
   },
   module: {
+    parser: {
+      'css/auto': {
+        namedExports: false,
+      },
+    },
     rules: [
       {
         test: /\.jsx$/,
@@ -49,6 +57,7 @@ export default defineConfig({
         },
         type: 'javascript/auto',
       },
+      
     ],
   },
   resolve: {
