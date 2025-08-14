@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Outlet, useRoutes, useNavigate, useLocation } from 'react-router';
 import Home from './Home';
 import Task from './Task';
-import * as styles from './index.module.css'
+import './rest.css';
+import styles from './index.module.css';
+import clsx from 'clsx';
 
 function Layout() {
   const navigate = useNavigate();
@@ -16,25 +18,20 @@ function Layout() {
 
   return (
     <div className={styles.container}>
-      <header>header</header>
+      <header>
+        <h1>Get Started</h1>
+      </header>
       <main style={{ display: 'flex' }}>
         <section style={{ minWidth: 200 }}>
           <nav>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
+            <ul>
               {menu.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
                   <li key={item.path}>
                     <button
                       onClick={() => navigate(item.path)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        padding: '8px 12px',
-                        cursor: 'pointer',
-                        color: isActive ? 'red' : 'black',
-                        fontWeight: isActive ? 'bold' : 'normal',
-                      }}
+                      className={clsx(styles.navBtn, isActive && styles.active)}
                     >
                       {item.label}
                     </button>

@@ -1,0 +1,112 @@
+/* ===========================
+   CSS Reset / Normalize
+   Author: modern reset
+   =========================== */
+
+/* 1. 全局通用设置 */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. HTML5 元素显示修正 */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, main, nav, section, summary {
+  display: block;
+}
+
+/* 3. 默认字体、行高 */
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%; /* iOS 字体缩放 */
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #fff;
+  color: #000;
+}
+
+/* 4. 链接、图片、表格 */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* 5. 表单元素 */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+  background-color: transparent;
+}
+
+/* 6. 滚动条和列表 */
+ul,
+ol {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote::before,
+blockquote::after,
+q::before,
+q::after {
+  content: '';
+}
+
+/* 7. 其他 */
+hr {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+}
+
+code,
+pre {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+/* 可选：表单默认样式优化 */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
