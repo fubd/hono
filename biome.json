@@ -6,7 +6,7 @@
     "useIgnoreFile": false
   },
   "files": {
-    "includes": ["src/**", "client/**"]
+    "includes": ["src/**", "client/**", "!**.css"]
   },
   "formatter": {
     "enabled": true,
