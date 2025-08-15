@@ -1,5 +1,5 @@
-import { defineConfig } from '@rsbuild/core';
-import { pluginReact } from '@rsbuild/plugin-react';
+import {defineConfig} from '@rsbuild/core';
+import {pluginReact} from '@rsbuild/plugin-react';
 
 export default defineConfig({
   server: {
@@ -8,7 +8,7 @@ export default defineConfig({
   source: {
     entry: {
       index: './client/main.tsx',
-    }
+    },
   },
   output: {
     filename: {
@@ -17,21 +17,19 @@ export default defineConfig({
       css: '[name].[contenthash:8].css',
     },
     distPath: {
-      root: 'static',
+      root: './static',
       html: './',
       favicon: './',
       css: './',
-      js: './'
+      js: './',
     },
     cleanDistPath: true,
     sourceMap: false,
     legalComments: 'none',
   },
-  plugins: [
-    pluginReact(), 
-  ],
+  plugins: [pluginReact()],
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx']
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
   html: {
     template: './template.html',

@@ -1,14 +1,12 @@
-import { injectable } from 'inversify';
-import { Redis } from 'ioredis';
-import { createRedisClient } from '../config/db.js';
+import {injectable} from 'inversify';
+import type {Redis} from 'ioredis';
+import {createRedisClient} from '../config/db.js';
 
 export interface IRedisService {
   getClient(): Redis;
   get(key: string): Promise<string | null>;
   set(key: string, value: string, ttl?: number): Promise<void>;
 }
-
-
 
 @injectable()
 export class RedisService {

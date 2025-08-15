@@ -1,5 +1,5 @@
-import type { UserModel } from "./user.js";
+import type {UserModel} from './user.js';
 
 export interface Database {
-  user: UserModel
+  user: UserModel;
 }

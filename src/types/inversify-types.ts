@@ -8,4 +8,4 @@ export const TYPES = {
   UserController: Symbol.for('UserController'),
 } as const;
 
-export type TYPES = typeof TYPES
+export type TYPES = typeof TYPES;

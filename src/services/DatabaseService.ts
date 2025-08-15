@@ -1,12 +1,12 @@
-import { injectable } from 'inversify';
-import { Kysely } from 'kysely';
-import { createMysqlPool, createKyselyDb } from '../config/db.js';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { promisify } from 'util';
-import type { Pool } from 'mysql2';
-import type { Database } from '../models/DataBase.js';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {promisify} from 'node:util';
+import {injectable} from 'inversify';
+import type {Kysely} from 'kysely';
+import type {Pool} from 'mysql2';
+import {createKyselyDb, createMysqlPool} from '../config/db.js';
+import type {Database} from '../models/DataBase.js';
 
 export interface IDatabaseService {
   getDb(): Kysely<Database>;
@@ -32,15 +32,12 @@ export class DatabaseService {
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = path.dirname(__filename);
       const query = promisify(this.pool.query).bind(this.pool);
-      const sqlScript = await fs.readFile(
-        path.resolve(__dirname, '../sql/init.sql'), 
-        'utf-8'
-      );
+      const sqlScript = await fs.readFile(path.resolve(__dirname, '../sql/init.sql'), 'utf-8');
       const statements = sqlScript.split(';').filter((stmt) => stmt.trim());
 
       for (const statement of statements) {
         if (statement.trim()) {
-          await query({ sql: statement });
+          await query({sql: statement});
           console.log(`执行 SQL 成功: ${statement.trim().slice(0, 50)}...`);
         }
       }

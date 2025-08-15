@@ -1,10 +1,10 @@
-import { createPool, type Pool } from 'mysql2';
-import { Kysely, MysqlDialect } from 'kysely';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {Redis} from 'ioredis';
+import {Kysely, MysqlDialect} from 'kysely';
+import {createPool, type Pool} from 'mysql2';
 import Tinypool from 'tinypool';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import type { Database } from '../models/DataBase.js';
+import type {Database} from '../models/DataBase.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,7 +31,7 @@ export function createMysqlPool(): Pool {
 
 export function createKyselyDb(pool: Pool): Kysely<Database> {
   return new Kysely<Database>({
-    dialect: new MysqlDialect({ pool }),
+    dialect: new MysqlDialect({pool}),
   });
 }
 

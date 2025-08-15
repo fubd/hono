@@ -1,20 +1,18 @@
-import { injectable, inject } from 'inversify';
-import type { CreateUserDTO, IUserService, UpdateUserDTO, UserDRO, UserModel } from './types.js';
-import { TYPES } from '../types/inversify-types.js';
-import { sql } from 'kysely';
-import type { IDatabaseService } from '../services/DatabaseService.js';
+import {inject, injectable} from 'inversify';
+import {sql} from 'kysely';
+import type {IDatabaseService} from '../services/DatabaseService.js';
+import {TYPES} from '../types/inversify-types.js';
+import type {CreateUserDTO, IUserService, UpdateUserDTO, UserDRO, UserModel} from './types.js';
 
 @injectable()
 export class UserService implements IUserService {
-  constructor(
-    @inject(TYPES.DatabaseService) private databaseService: IDatabaseService
-  ) {}
+  constructor(@inject(TYPES.DatabaseService) private databaseService: IDatabaseService) {}
 
   async getUserById(id: string): Promise<UserModel | null> {
     const db = this.databaseService.getDb();
     const result = await sql<UserModel>`
       SELECT * from user where id = ${id}
-    `.execute(db)
+    `.execute(db);
     return result.rows[0] || null;
   }
 
@@ -23,13 +21,12 @@ export class UserService implements IUserService {
     const result = await sql<UserModel>`
       SELECT * FROM user
     `.execute(db);
-    return result.rows
+    return result.rows;
   }
 
   async createUser({name, password}: CreateUserDTO): Promise<string> {
     const db = this.databaseService.getDb();
-    const result = await sql<{ uuid: string }>
-      `SELECT UUID_SHORT() as uuid
+    const result = await sql<{uuid: string}>`SELECT UUID_SHORT() as uuid
     `.execute(db);
     const insertId = result.rows[0].uuid;
 

@@ -1,7 +1,7 @@
-import { injectable } from 'inversify';
-import type { Context } from 'hono';
-import path from 'path';
-import fs from 'fs/promises';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import type {Context} from 'hono';
+import {injectable} from 'inversify';
 
 export interface IFileUploadService {
   handleUpload(c: Context): Promise<Response> | Promise<any>;
@@ -12,7 +12,7 @@ export class FileUploadService {
   private uploadDir = path.resolve('./uploads');
 
   constructor() {
-    fs.mkdir(this.uploadDir, { recursive: true }).catch(console.error);
+    fs.mkdir(this.uploadDir, {recursive: true}).catch(console.error);
   }
 
   async handleUpload(c: Context) {
@@ -21,7 +21,7 @@ export class FileUploadService {
       const file = formData.get('file');
 
       if (!file || !(file instanceof File)) {
-        return c.json({ success: false, error: '未找到上传文件' }, 400);
+        return c.json({success: false, error: '未找到上传文件'}, 400);
       }
 
       const arrayBuffer = await file.arrayBuffer();
@@ -41,7 +41,7 @@ export class FileUploadService {
       });
     } catch (err) {
       console.error(err);
-      return c.json({ success: false, error: (err as Error).message }, 500);
+      return c.json({success: false, error: (err as Error).message}, 500);
     }
   }
 }

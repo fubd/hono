@@ -1,6 +1,6 @@
-import { injectable } from 'inversify';
-import Tinypool from 'tinypool';
-import { createWorkerPool } from '../config/db.js';
+import {injectable} from 'inversify';
+import type Tinypool from 'tinypool';
+import {createWorkerPool} from '../config/db.js';
 
 export interface IWorkerService {
   run<T, R>(task: T): Promise<R>;
