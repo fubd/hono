@@ -1,4 +1,3 @@
-
 services:
   node:
     image: node:22-alpine
@@ -16,8 +15,10 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT_CONTAINER=${REDIS_PORT_CONTAINER}
     depends_on:
-      - mysql
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     command: sh -c "npm install --include=dev && npm run dev"
     volumes:
       - ${WORKING_DIR_HOST}:${WORKING_DIR_CONTAINER}
@@ -41,6 +42,12 @@ services:
       - "${DB_PORT_CONTAINER}"
     ports:
       - "${DB_PORT_HOST}:${DB_PORT_CONTAINER}"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USER}", "-p${DB_PASS}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   redis:
     image: redis:7
@@ -51,6 +58,11 @@ services:
       - "${REDIS_PORT_CONTAINER}"
     ports:
       - "${REDIS_PORT_HOST}:${REDIS_PORT_CONTAINER}"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   nginx:
     image: nginx:alpine

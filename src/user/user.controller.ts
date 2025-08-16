@@ -4,7 +4,7 @@ import type {IRedisService} from '../services/RedisService.js';
 import type {ISocketIOWebSocketService} from '../services/SocketIOWebSocketService.js';
 import type {IWorkerService} from '../services/WorkerService.js';
 import {TYPES} from '../types/inversify-types.js';
-import type {IUserService} from './types.js';
+import type {IUserService, UserDRO, UserListDRO} from './types.js';
 
 @injectable()
 export class UserController {
@@ -19,24 +19,24 @@ export class UserController {
     try {
       const id = c.req.query('id');
       if (!id) {
-        return c.json({success: false, error: '缺少用户ID'});
+        return c.json<UserDRO>({success: false, msg: '缺少用户ID'});
       }
       const user = await this.userService.getUserById(id);
       if (!user) {
-        return c.json({success: false, error: '用户不存在'});
+        return c.json<UserDRO>({success: false, msg: '用户不存在'});
       }
-      return c.json({success: true, data: user});
+      return c.json<UserDRO>({success: true, data: user});
     } catch (error) {
-      return c.json({success: false});
+      return c.json<UserDRO>({success: false});
     }
   }
 
   async getUsers(c: Context) {
     try {
       const users = await this.userService.getAllUsers();
-      return c.json({success: true, data: users});
+      return c.json<UserListDRO>({success: true, data: users});
     } catch (error) {
-      return c.json({success: false});
+      return c.json<UserListDRO>({success: false});
     }
   }
 
@@ -56,7 +56,7 @@ export class UserController {
       const {name, password} = await c.req.json();
 
       if (!id) {
-        return c.json({success: false, error: '缺少用户ID'});
+        return c.json({success: false, msg: '缺少用户ID'});
       }
 
       await this.userService.updateUser(id, {name, password});
@@ -71,7 +71,7 @@ export class UserController {
       const id = c.req.query('id');
 
       if (!id) {
-        return c.json({success: false, error: '缺少用户ID'}, 400);
+        return c.json({success: false, msg: '缺少用户ID'}, 400);
       }
 
       await this.userService.deleteUser(id);

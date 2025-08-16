@@ -1,9 +1,78 @@
+version: '3.8'
+
 services:
   node:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: .  # 指定 Dockerfile 所在的目录，'.' 代表当前目录
       args:
-        NODE_PORT: ${NODE_PORT}   # 从 .env 自动提取传入 Dockerfile
-    image: registry.cn-hangzhou.aliyuncs.com/fubd_own/hono-app:1.0
-    command: ["npm", "start"]
+        - NODE_PORT_CONTAINER=${NODE_PORT_CONTAINER} # 将 .env 中的变量传递给 Dockerfile 中的 ARG
+      image: registry.cn-hangzhou.aliyuncs.com/fubd_own/hono-app:${IMAGE_TAG:-latest} # 构建后为镜像打上这个标签
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=mysql
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT_CONTAINER=${DB_PORT_CONTAINER}
+      - REDIS_HOST=redis
+      - REDIS_PORT_CONTAINER=${REDIS_PORT_CONTAINER}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    expose:
+      - "${NODE_PORT_CONTAINER}"
+
+  nginx:
+    image: registry.cn-hangzhou.aliyuncs.com/fubd_own/hono-nginx:${IMAGE_TAG:-latest}
+    restart: always
+    ports:
+      - "${NGINX_PORT_HOST}:${NGINX_PORT_CONTAINER}"
+      - "${NGINX_PORT_HOST}:${NGINX_PORT_CONTAINER}"
+    depends_on:
+      - node
+
+  mysql:
+    image: mysql:8.0
+    container_name: hono-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    volumes:
+      - mysql-data:${DB_DATA_CONTAINER}
+      - ./mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql:ro
+    expose:
+      - "${DB_PORT_CONTAINER}"
+    ports:
+      - "${DB_PORT_HOST}:${DB_PORT_CONTAINER}"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USER}", "-p${DB_PASS}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  redis:
+    image: redis:7
+    container_name: hono-redis
+    volumes:
+      - redis-data:${REDIS_DATA_CONTAINER}
+    expose:
+      - "${REDIS_PORT_CONTAINER}"
+    ports:
+      - "${REDIS_PORT_HOST}:${REDIS_PORT_CONTAINER}"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  mysql-data:
+  redis-data:

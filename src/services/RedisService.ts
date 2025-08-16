@@ -1,6 +1,12 @@
 import {injectable} from 'inversify';
-import type {Redis} from 'ioredis';
-import {createRedisClient} from '../config/db.js';
+import {Redis} from 'ioredis';
+
+export function createRedisClient(): Redis {
+  return new Redis({
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT_CONTAINER),
+  });
+}
 
 export interface IRedisService {
   getClient(): Redis;

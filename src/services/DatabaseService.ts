@@ -3,10 +3,38 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promisify} from 'node:util';
 import {injectable} from 'inversify';
-import type {Kysely} from 'kysely';
-import type {Pool} from 'mysql2';
-import {createKyselyDb, createMysqlPool} from '../config/db.js';
+import {Kysely, MysqlDialect} from 'kysely';
+import {createPool, type Pool} from 'mysql2';
 import type {Database} from '../models/DataBase.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export function createMysqlPool(): Pool {
+  return createPool({
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT_CONTAINER),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    connectionLimit: 10,
+    supportBigNumbers: true,
+    bigNumberStrings: true,
+    typeCast: (field, next) => {
+      if (field.type === 'LONGLONG') {
+        const val = field.string();
+        return val === null ? null : val;
+      }
+      return next();
+    },
+  });
+}
+
+export function createKyselyDb(pool: Pool): Kysely<Database> {
+  return new Kysely<Database>({
+    dialect: new MysqlDialect({pool}),
+  });
+}
 
 export interface IDatabaseService {
   getDb(): Kysely<Database>;
