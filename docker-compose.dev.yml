@@ -70,7 +70,7 @@ services:
     depends_on:
       - node
     volumes:
-      - ${WORKING_DIR_HOST}:${WORKING_DIR_CONTAINER}:ro
+      - ${NGINX_DIR_HOST}:${NGINX_DIR_CONTAINER}:ro
       - ${NGINX_CONF_HOST}:${NGINX_CONF_CONTAINER}:ro
     ports:
       - "${NGINX_PORT_HOST}:${NGINX_PORT_CONTAINER}"

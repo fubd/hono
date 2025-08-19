@@ -30,7 +30,6 @@ services:
     restart: always
     ports:
       - "${NGINX_PORT_HOST}:${NGINX_PORT_CONTAINER}"
-      - "${NGINX_PORT_HOST}:${NGINX_PORT_CONTAINER}"
     depends_on:
       - node
 

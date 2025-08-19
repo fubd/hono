@@ -64,7 +64,6 @@ RUN npm install --omit=dev
 #    最终的镜像里将不会包含任何 TypeScript 源码、React 组件源码、
 #    配置文件或其他任何不必要的文件。
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/static ./static
 
 # 5. 定义容器启动命令
 #    使用 tsc 编译后的 JavaScript 入口文件来启动服务器。
