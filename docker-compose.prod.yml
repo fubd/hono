@@ -6,7 +6,7 @@ services:
       context: .  # 指定 Dockerfile 所在的目录，'.' 代表当前目录
       args:
         - NODE_PORT_CONTAINER=${NODE_PORT_CONTAINER} # 将 .env 中的变量传递给 Dockerfile 中的 ARG
-      image: registry.cn-hangzhou.aliyuncs.com/fubd_own/hono-app:${IMAGE_TAG:-latest} # 构建后为镜像打上这个标签
+    image: registry.cn-hangzhou.aliyuncs.com/fubd_own/hono-app:${IMAGE_TAG:-latest} # 构建后为镜像打上这个标签
     restart: always
     environment:
       - NODE_ENV=production

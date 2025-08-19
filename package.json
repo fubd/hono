@@ -3,8 +3,9 @@
     "dev:hono": "tsx watch src/index.ts",
     "dev:client": "rsbuild build --watch",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:hono\"",
-    "build": "rsbuild build && tsc && cp -r src/sql dist/sql",
-    "start": "node dist/index.js"
+    "build:sql": "cpx \"src/sql/**/*.sql\" dist/src/sql",
+    "build": "rsbuild build && tsc && npm run build:sql",
+    "start": "node dist/src/index.js"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.2",
@@ -30,6 +31,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "concurrently": "^8.2.2",
+    "cpx": "^1.5.0",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3"
   },
