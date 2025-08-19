@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {io, type Socket} from 'socket.io-client';
 import Home from './Home';
+import {Host} from './utils';
 
 const container = document.getElementById('root');
 
@@ -12,7 +13,7 @@ function Task() {
   const [current, setCurrent] = React.useState<{name: string; id: string; password: string} | null>(null);
 
   function getAll() {
-    fetch('https://m1.fubodong.com/api/user/list')
+    fetch(`${Host}/api/user/list`)
       .then((res) => res.json())
       .then((data) => {
         setList(data.data);
@@ -35,7 +36,7 @@ function Task() {
       alert('请输入password');
       return;
     }
-    fetch('https://m1.fubodong.com/api/user/add', {
+    fetch(`${Host}/api/user/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -60,7 +61,7 @@ function Task() {
   function onEdit() {
     const name = (document.getElementById('editName') as HTMLInputElement).value;
     const password = (document.getElementById('editPassword') as HTMLInputElement).value;
-    fetch(`https://m1.fubodong.com/api/user/update?id=${current?.id}`, {
+    fetch(`${Host}/api/user/update?id=${current?.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -82,7 +83,7 @@ function Task() {
   }
 
   function onDel(id: string) {
-    fetch(`https://m1.fubodong.com/api/user/del?id=${id}`, {
+    fetch(`${Host}/api/user/del?id=${id}`, {
       method: 'POST',
     })
       .then((res) => res.json())
@@ -103,7 +104,7 @@ function Task() {
 
   useEffect(() => {
     // 初始化 socket
-    socket = io('https://m1.fubodong.com');
+    socket = io(`${Host}`);
 
     socket.on('connect', () => {
       console.log('连接成功:', socket.id);
@@ -184,7 +185,7 @@ function Task() {
           上传
         </button>
         {uploadRestul && <pre>{JSON.stringify(uploadRestul, null, 2)}</pre>}
-        {uploadRestul?.filename && <img src={`https://m1.fubodong.com/uploads/${uploadRestul?.filename}`} />}
+        {uploadRestul?.filename && <img src={`${Host}/uploads/${uploadRestul?.filename}`} />}
       </div>
       <hr />
       <button type="button" onClick={getAll}>

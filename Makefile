@@ -24,7 +24,7 @@ dev-shell:
 build:
 	@echo "--> Building production images with tag: $(IMAGE_TAG)"
 	docker build -t $(REGISTRY_PREFIX)/hono-app:$(IMAGE_TAG) -t $(REGISTRY_PREFIX)/hono-app:latest -f Dockerfile .
-	docker build -t $(REGISTRY_PREFIX)/hono-nginx:$(IMAGE_TAG) -t $(REGISTRY_PREFIX)/hono-nginx:latest -f nginx/Dockerfile ./nginx
+	docker build -t $(REGISTRY_PREFIX)/hono-nginx:$(IMAGE_TAG) -t $(REGISTRY_PREFIX)/hono-nginx:latest -f gateway/Dockerfile ./gateway
 
 push:
 	@echo "--> Pushing images to registry with tag: $(IMAGE_TAG) and latest"
