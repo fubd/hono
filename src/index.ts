@@ -1,4 +1,3 @@
-import fs from 'node:fs';
 import {Server as HttpServer} from 'node:http';
 import path, {dirname, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -7,6 +6,7 @@ import {serve} from '@hono/node-server';
 import {serveStatic} from '@hono/node-server/serve-static';
 import dotenv from 'dotenv';
 import {Hono} from 'hono';
+import {cors} from 'hono/cors';
 import {logger} from 'hono/logger';
 import {Container} from 'inversify';
 import {Redis} from 'ioredis';
@@ -25,6 +25,7 @@ import {type IUserService, UserController, UserService} from './user/index.js';
 dotenv.config();
 
 const app = new Hono();
+app.use('/api/*', cors());
 app.use(logger());
 
 const container = new Container();
