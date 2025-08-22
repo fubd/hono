@@ -1,0 +1,34 @@
+{
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.validate.enable": true,
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"files.autoSave": "afterDelay",
+	"files.autoSaveDelay": 180000,
+	"liveServer.settings.port": 5001,
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.biome": "always"
+	},
+	"eslint.enable": false,
+	"eslint.lintTask.enable": false,
+	"prettier.enable": false,
+	"biome.enabled": true,
+	"biome.lsp.trace.server": "verbose",
+	"editor.defaultFormatter": "biomejs.biome",
+	"[javascript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"cSpell.words": [],
+}
