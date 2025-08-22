@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   node:
     build:
@@ -7,6 +5,7 @@ services:
       args:
         - NODE_PORT_CONTAINER=${NODE_PORT_CONTAINER} # 将 .env 中的变量传递给 Dockerfile 中的 ARG
     image: registry.cn-hangzhou.aliyuncs.com/fubd_own/hono-app:${IMAGE_TAG:-latest} # 构建后为镜像打上这个标签
+    platform: linux/amd64
     restart: always
     environment:
       - NODE_ENV=production
@@ -27,6 +26,7 @@ services:
 
   nginx:
     image: registry.cn-hangzhou.aliyuncs.com/fubd_own/hono-nginx:${IMAGE_TAG:-latest}
+    platform: linux/amd64
     restart: always
     ports:
       - "${NGINX_PORT_HOST}:${NGINX_PORT_CONTAINER}"
@@ -35,6 +35,7 @@ services:
 
   mysql:
     image: mysql:8.0
+    platform: linux/amd64
     container_name: hono-mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -58,6 +59,7 @@ services:
 
   redis:
     image: redis:7
+    platform: linux/amd64
     container_name: hono-redis
     volumes:
       - redis-data:${REDIS_DATA_CONTAINER}
