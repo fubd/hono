@@ -22,10 +22,10 @@ dev-shell:
 # (在开发机或 CI/CD 服务器上执行)
 # ======================
 build:
-	@echo "--> Building production images with tag: $(IMAGE_TAG)"
-	docker build -t $(REGISTRY_PREFIX)/hono-app:$(IMAGE_TAG) -t $(REGISTRY_PREFIX)/hono-app:latest -f Dockerfile .
-	docker build -t $(REGISTRY_PREFIX)/hono-nginx:$(IMAGE_TAG) -t $(REGISTRY_PREFIX)/hono-nginx:latest -f nginx/Dockerfile ./nginx
-
+	@echo "--> Building production images for linux/amd64 with tag: $(IMAGE_TAG)"
+	docker buildx build --platform linux/amd64,linux/arm64 -t $(REGISTRY_PREFIX)/hono-app:$(IMAGE_TAG) -t $(REGISTRY_PREFIX)/hono-app:latest -f Dockerfile . --load
+	docker buildx build --platform linux/amd64,linux/arm64 -t $(REGISTRY_PREFIX)/hono-nginx:$(IMAGE_TAG) -t $(REGISTRY_PREFIX)/hono-nginx:latest -f nginx/Dockerfile ./nginx --load
+	
 push:
 	@echo "--> Pushing images to registry with tag: $(IMAGE_TAG) and latest"
 	docker push $(REGISTRY_PREFIX)/hono-app:$(IMAGE_TAG)

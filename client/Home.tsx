@@ -13,7 +13,7 @@ function Animal() {
       ></div>
       <div style={{ boxSizing: 'border-box', border: '1px solid hotpink', width: 100, height: 100, margin: 20, background: '#f0f0f0' }}></div>
       <div style={{ background: 'green', width: 100, height: 100 }}>
-        new
+        new2
       </div>
     </div>
   );
