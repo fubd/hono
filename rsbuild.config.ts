@@ -17,7 +17,7 @@ export default defineConfig({
       css: '[name].[contenthash:8].css',
     },
     distPath: {
-      root: './gateway/static',
+      root: './nginx/static',
       html: './',
       favicon: './',
       css: './',

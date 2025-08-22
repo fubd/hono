@@ -37,7 +37,6 @@ services:
       DB_PASS: ${DB_PASS}
     volumes:
       - mysql-data:${DB_DATA_CONTAINER}
-      - ./mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql:ro
     expose:
       - "${DB_PORT_CONTAINER}"
     ports:

@@ -1,7 +1,0 @@
-CREATE DATABASE IF NOT EXISTS hono_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-CREATE USER IF NOT EXISTS 'hono_user'@'%' IDENTIFIED BY 'hono_pass';
-
-GRANT ALL PRIVILEGES ON hono_db.* TO 'hono_user'@'%';
-
-FLUSH PRIVILEGES;
