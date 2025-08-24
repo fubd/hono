@@ -33,4 +33,4 @@ push:
 	docker push $(REGISTRY_PREFIX)/hono-nginx:$(IMAGE_TAG)
 	docker push $(REGISTRY_PREFIX)/hono-nginx:latest
 
-build-push: build push
+release: build push
