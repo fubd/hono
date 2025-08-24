@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {io, type Socket} from 'socket.io-client';
 import Home from './Home';
-import {Host} from './utils';
+import {HOST, STATIC_HOST} from './utils';
 
 const container = document.getElementById('root');
 
@@ -13,7 +13,7 @@ function Task() {
   const [current, setCurrent] = React.useState<{name: string; id: string; password: string} | null>(null);
 
   function getAll() {
-    fetch(`${Host}/api/user/list`)
+    fetch(`${HOST}/api/user/list`)
       .then((res) => res.json())
       .then((data) => {
         setList(data.data);
@@ -36,7 +36,7 @@ function Task() {
       alert('请输入password');
       return;
     }
-    fetch(`${Host}/api/user/add`, {
+    fetch(`${HOST}/api/user/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function Task() {
   function onEdit() {
     const name = (document.getElementById('editName') as HTMLInputElement).value;
     const password = (document.getElementById('editPassword') as HTMLInputElement).value;
-    fetch(`${Host}/api/user/update?id=${current?.id}`, {
+    fetch(`${HOST}/api/user/update?id=${current?.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ function Task() {
   }
 
   function onDel(id: string) {
-    fetch(`${Host}/api/user/del?id=${id}`, {
+    fetch(`${HOST}/api/user/del?id=${id}`, {
       method: 'POST',
     })
       .then((res) => res.json())
@@ -104,7 +104,7 @@ function Task() {
 
   useEffect(() => {
     // 初始化 socket
-    socket = io(`${Host}`);
+    socket = io(`${HOST}`);
 
     socket.on('connect', () => {
       console.log('连接成功:', socket.id);
@@ -130,7 +130,7 @@ function Task() {
   }, []);
 
   const [file, setFile] = useState(null);
-  const [uploadRestul, setUploadResult] = useState<{filename: string} | null>(null);
+  const [uploadResult, setUploadResult] = useState<{relativePath: string} | null>(null);
 
   const handleFileChange = (e: any) => {
     setFile(e.target.files[0]);
@@ -146,7 +146,7 @@ function Task() {
     formData.append('file', file);
 
     try {
-      const res = await fetch('/api/upload', {
+      const res = await fetch(`${STATIC_HOST}/api/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -184,8 +184,8 @@ function Task() {
         <button type="button" onClick={handleUpload}>
           上传
         </button>
-        {uploadRestul && <pre>{JSON.stringify(uploadRestul, null, 2)}</pre>}
-        {uploadRestul?.filename && <img src={`${Host}/uploads/${uploadRestul?.filename}`} />}
+        {uploadResult && <pre>{JSON.stringify(uploadResult, null, 2)}</pre>}
+        {uploadResult?.relativePath && <img src={`${STATIC_HOST}/uploads/${uploadResult?.relativePath}`} />}
       </div>
       <hr />
       <button type="button" onClick={getAll}>

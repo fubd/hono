@@ -14,7 +14,6 @@ import {Kysely, MysqlDialect, type RawBuilder, type Sql, sql} from 'kysely';
 import {createPool} from 'mysql2';
 import Tinypool from 'tinypool';
 import {DatabaseService, type IDatabaseService} from './services/DatabaseService.js';
-import {FileUploadService, type IFileUploadService} from './services/FileUploadService.js';
 import {type IRedisService, RedisService} from './services/RedisService.js';
 import {type ISocketIOWebSocketService, SocketIOWebSocketService} from './services/SocketIOWebSocketService.js';
 import {type IWorkerService, WorkerService} from './services/WorkerService.js';
@@ -37,7 +36,6 @@ container
   .bind<ISocketIOWebSocketService>(TYPES.SocketIOWebSocketService)
   .to(SocketIOWebSocketService)
   .inSingletonScope();
-container.bind<IFileUploadService>(TYPES.FileUploadService).to(FileUploadService).inSingletonScope();
 
 container.bind<IUserService>(TYPES.UserService).to(UserService).inSingletonScope();
 container.bind<UserController>(TYPES.UserController).to(UserController).inSingletonScope();
@@ -46,11 +44,6 @@ const databaseService = container.get<IDatabaseService>(TYPES.DatabaseService);
 await databaseService.initDatabase();
 
 const socketService = container.get<ISocketIOWebSocketService>(TYPES.SocketIOWebSocketService);
-
-const fileUploadService = container.get<FileUploadService>(TYPES.FileUploadService);
-app.post('/api/upload', async (c) => {
-  return await fileUploadService.handleUpload(c);
-});
 
 const userController = container.get<UserController>(TYPES.UserController);
 app.get('/api/user/list', (c) => userController.getUsers(c));
